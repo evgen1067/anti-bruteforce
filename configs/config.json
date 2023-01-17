@@ -9,7 +9,7 @@
     "user": "go_user",
     "password": "go_password",
     "database": "bruteforce_db",
-    "sslMode": false
+    "sslMode": "disable"
   },
   "limitations": {
     "login": 10,

@@ -167,7 +167,7 @@ func easyjson6615c02eDecode1(in *jlexer.Lexer, out *struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Database string `json:"database"`
-	SSLMode  bool   `json:"sslMode"`
+	SSLMode  string `json:"sslMode"`
 }) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
@@ -198,7 +198,7 @@ func easyjson6615c02eDecode1(in *jlexer.Lexer, out *struct {
 		case "database":
 			out.Database = string(in.String())
 		case "sslMode":
-			out.SSLMode = bool(in.Bool())
+			out.SSLMode = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -215,7 +215,7 @@ func easyjson6615c02eEncode1(out *jwriter.Writer, in struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Database string `json:"database"`
-	SSLMode  bool   `json:"sslMode"`
+	SSLMode  string `json:"sslMode"`
 }) {
 	out.RawByte('{')
 	first := true
@@ -248,7 +248,7 @@ func easyjson6615c02eEncode1(out *jwriter.Writer, in struct {
 	{
 		const prefix string = ",\"sslMode\":"
 		out.RawString(prefix)
-		out.Bool(bool(in.SSLMode))
+		out.String(string(in.SSLMode))
 	}
 	out.RawByte('}')
 }

@@ -16,7 +16,7 @@ type Config struct {
 		User     string `json:"user"`
 		Password string `json:"password"`
 		Database string `json:"database"`
-		SSLMode  bool   `json:"sslMode"`
+		SSLMode  string `json:"sslMode"`
 	} `json:"db"`
 	Limitations struct {
 		Login    int `json:"login"`
