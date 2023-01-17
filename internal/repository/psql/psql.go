@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
-	"github.com/evgen1067/anti-bruteforce/internal/repository"
 	_ "github.com/jackc/pgx/v4/stdlib" //nolint:blank-imports
 )
 
@@ -16,7 +15,7 @@ type Repo struct {
 	cfg *config.Config
 }
 
-func NewRepo(cfg *config.Config) repository.DatabaseRepo {
+func NewRepo(cfg *config.Config) *Repo {
 	repo := new(Repo)
 	repo.cfg = cfg
 	return repo
