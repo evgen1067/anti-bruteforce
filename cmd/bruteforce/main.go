@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/evgen1067/anti-bruteforce/internal/app"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"log"
 )
@@ -18,5 +19,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(cfg)
+	err = app.Run(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

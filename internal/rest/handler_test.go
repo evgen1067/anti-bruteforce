@@ -1,4 +1,4 @@
-package server
+package rest
 
 import (
 	"bytes"
@@ -47,7 +47,7 @@ func TestAdd(t *testing.T) {
 	require.NoError(t, err)
 	defer repo.Close()
 	s := service.NewServices(ctx, repo)
-	InitServer(s, cfg)
+	NewServer(s, cfg)
 
 	request := common.APIListRequest{Address: "127.0.12.1/25"}
 

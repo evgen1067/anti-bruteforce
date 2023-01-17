@@ -1,4 +1,4 @@
-package server
+package rest
 
 import (
 	"github.com/evgen1067/anti-bruteforce/internal/config"
@@ -25,7 +25,7 @@ func Router() *mux.Router {
 	return router
 }
 
-func InitServer(_s *service.Services, cfg *config.Config) *http.Server {
+func NewServer(_s *service.Services, cfg *config.Config) *http.Server {
 	s = _s
 	return &http.Server{
 		Addr:              net.JoinHostPort(cfg.HTTP.Host, cfg.HTTP.Port),
