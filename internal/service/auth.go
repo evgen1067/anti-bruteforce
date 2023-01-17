@@ -9,16 +9,19 @@ type AuthService struct {
 	ctx       context.Context
 	blacklist Blacklist
 	whitelist Whitelist
+	bucket    LeakyBucket
 }
 
 func NewAuthService(ctx context.Context,
 	blacklist Blacklist,
 	whitelist Whitelist,
+	bucket LeakyBucket,
 ) *AuthService {
 	return &AuthService{
 		ctx:       ctx,
 		blacklist: blacklist,
 		whitelist: whitelist,
+		bucket:    bucket,
 	}
 }
 
@@ -38,6 +41,5 @@ func (a *AuthService) Authorize(req common.APIAuthRequest) bool {
 	if res {
 		return false
 	}
-	// TODO "добавить дырявые ведра"
-	return false
+	return a.bucket.Add(req)
 }

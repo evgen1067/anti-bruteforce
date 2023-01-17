@@ -48,7 +48,6 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	}
 	if ok {
 		w.WriteHeader(http.StatusOK)
-		return
 	}
 	w.WriteHeader(http.StatusServiceUnavailable)
 }

@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"github.com/evgen1067/anti-bruteforce/internal/bucket"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
 	"github.com/evgen1067/anti-bruteforce/internal/rest"
@@ -24,8 +25,14 @@ func Run(cfg *config.Config) error {
 	}
 	defer db.Close()
 
+	// Запускаем дырявые ведра :)
+	leakyBucket := bucket.NewLeakyBucket(cfg)
+	go func() {
+		leakyBucket.Repeat(ctx)
+	}()
+
 	// Собираем сервисы
-	services := service.NewServices(ctx, db)
+	services := service.NewServices(ctx, db, leakyBucket)
 
 	// Запускаем сервер АПИ
 	server := rest.NewServer(services, cfg)

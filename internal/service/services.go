@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/evgen1067/anti-bruteforce/internal/bucket"
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
 )
@@ -22,16 +23,21 @@ type Whitelist interface {
 	DeleteFromWhitelist(address string) error
 }
 
+type LeakyBucket interface {
+	Add(req common.APIAuthRequest) bool
+	ResetBucket()
+}
+
 type Services struct {
 	Auth
 	Blacklist
 	Whitelist
 }
 
-func NewServices(ctx context.Context, db *psql.Repo) *Services {
+func NewServices(ctx context.Context, db *psql.Repo, lb *bucket.LeakyBucket) *Services {
 	blacklist := NewBlacklistService(db, ctx)
 	whitelist := NewWhitelistService(db, ctx)
-	auth := NewAuthService(ctx, blacklist, whitelist)
+	auth := NewAuthService(ctx, blacklist, whitelist, lb)
 
 	return &Services{
 		Auth:      auth,
