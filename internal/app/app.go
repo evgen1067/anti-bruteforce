@@ -2,14 +2,15 @@ package app
 
 import (
 	"context"
+	"os/signal"
+	"syscall"
+
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/evgen1067/anti-bruteforce/internal/logger"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
 	"github.com/evgen1067/anti-bruteforce/internal/rest"
 	"github.com/evgen1067/anti-bruteforce/internal/service"
-	"os/signal"
-	"syscall"
 )
 
 func Run(zLog *logger.Logger, cfg *config.Config) error {
@@ -49,7 +50,6 @@ func Run(zLog *logger.Logger, cfg *config.Config) error {
 	case err := <-errs:
 		return err
 	case <-ctx.Done():
-
 	}
 
 	if err := server.Shutdown(ctx); err != nil {

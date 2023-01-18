@@ -3,10 +3,11 @@ package bucket
 import (
 	"context"
 	"fmt"
-	"github.com/evgen1067/anti-bruteforce/internal/common"
-	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"sync"
 	"time"
+
+	"github.com/evgen1067/anti-bruteforce/internal/common"
+	"github.com/evgen1067/anti-bruteforce/internal/config"
 )
 
 type MapValueQuantity map[string]int

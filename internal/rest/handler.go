@@ -2,10 +2,11 @@ package rest
 
 import (
 	"errors"
-	"github.com/evgen1067/anti-bruteforce/internal/common"
-	"github.com/gorilla/mux"
 	"io"
 	"net/http"
+
+	"github.com/evgen1067/anti-bruteforce/internal/common"
+	"github.com/gorilla/mux"
 )
 
 func CustomNotFoundHandler(w http.ResponseWriter, r *http.Request) {
@@ -99,19 +100,20 @@ func WorkWithList(w http.ResponseWriter, r *http.Request, method string) {
 		})
 		return
 	}
-	if errors.Is(err, common.ErrIPExists) {
+	switch {
+	case errors.Is(err, common.ErrIPExists):
 		WriteException(w, &common.APIException{
 			Code:    http.StatusConflict,
 			Message: err.Error(),
 		})
 		return
-	} else if errors.Is(err, common.ErrIPNotExists) {
+	case errors.Is(err, common.ErrIPNotExists):
 		WriteException(w, &common.APIException{
 			Code:    http.StatusNotFound,
 			Message: err.Error(),
 		})
 		return
-	} else if err != nil {
+	case err != nil:
 		WriteException(w, &common.APIException{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error(),

@@ -1,12 +1,13 @@
 package rest
 
 import (
-	"github.com/evgen1067/anti-bruteforce/internal/config"
-	"github.com/evgen1067/anti-bruteforce/internal/service"
-	"github.com/gorilla/mux"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/evgen1067/anti-bruteforce/internal/config"
+	"github.com/evgen1067/anti-bruteforce/internal/service"
+	"github.com/gorilla/mux"
 )
 
 var s *service.Services

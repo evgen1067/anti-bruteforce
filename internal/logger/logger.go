@@ -1,13 +1,14 @@
 package logger
 
 import (
+	"os"
+	"path/filepath"
+	"time"
+
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
-	"path/filepath"
-	"time"
 )
 
 var defaultOutputPaths = []string{"out.log"}

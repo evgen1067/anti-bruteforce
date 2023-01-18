@@ -4,16 +4,19 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/evgen1067/anti-bruteforce/internal/common"
-	"github.com/evgen1067/anti-bruteforce/internal/config"
-	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
-	"github.com/evgen1067/anti-bruteforce/internal/service"
-	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/require"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/evgen1067/anti-bruteforce/internal/bucket"
+	"github.com/evgen1067/anti-bruteforce/internal/common"
+	"github.com/evgen1067/anti-bruteforce/internal/config"
+	"github.com/evgen1067/anti-bruteforce/internal/logger"
+	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
+	"github.com/evgen1067/anti-bruteforce/internal/service"
+	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -41,12 +44,15 @@ func TestCustomNotFoundHandler(t *testing.T) {
 func TestAdd(t *testing.T) {
 	cfg, err := config.Parse("../../configs/local.json")
 	require.NoError(t, err)
+	newLogger, err := logger.NewLogger(cfg)
+	leakyBucket := bucket.NewLeakyBucket(cfg)
+	require.NoError(t, err)
 	ctx := context.Background()
 	repo := psql.NewRepo(cfg)
 	err = repo.Connect(ctx)
 	require.NoError(t, err)
 	defer repo.Close()
-	s := service.NewServices(ctx, repo)
+	s := service.NewServices(ctx, repo, leakyBucket, newLogger)
 	NewServer(s, cfg)
 
 	request := common.APIListRequest{Address: "127.0.12.1/25"}

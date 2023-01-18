@@ -2,10 +2,11 @@ package main
 
 import (
 	"flag"
+	"log"
+
 	"github.com/evgen1067/anti-bruteforce/internal/app"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/evgen1067/anti-bruteforce/internal/logger"
-	"log"
 )
 
 var configFile string

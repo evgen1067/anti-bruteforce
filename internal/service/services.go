@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/logger"
@@ -45,8 +46,8 @@ type Services struct {
 }
 
 func NewServices(ctx context.Context, db *psql.Repo, lb *bucket.LeakyBucket, l *logger.Logger) *Services {
-	blacklist := NewBlacklistService(db, ctx)
-	whitelist := NewWhitelistService(db, ctx)
+	blacklist := NewBlacklistService(ctx, db)
+	whitelist := NewWhitelistService(ctx, db)
 	auth := NewAuthService(ctx, blacklist, whitelist, lb)
 	logg := NewLogger(l)
 	return &Services{

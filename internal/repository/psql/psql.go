@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	_ "github.com/jackc/pgx/v4/stdlib" //nolint:blank-imports
@@ -72,7 +73,7 @@ func (r *Repo) Add(ctx context.Context, table common.TableName, address string) 
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer tx.Rollback() ////nolint:errcheck
 
 	var (
 		query  string

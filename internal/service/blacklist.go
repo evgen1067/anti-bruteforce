@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/evgen1067/anti-bruteforce/internal/repository"
 )
 
@@ -10,10 +11,10 @@ type BlacklistService struct {
 	db  repository.ListRepo
 }
 
-func NewBlacklistService(db repository.ListRepo, ctx context.Context) *BlacklistService {
+func NewBlacklistService(ctx context.Context, db repository.ListRepo) *BlacklistService {
 	return &BlacklistService{
-		db:  db,
 		ctx: ctx,
+		db:  db,
 	}
 }
 

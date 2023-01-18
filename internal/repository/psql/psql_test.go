@@ -2,11 +2,12 @@ package psql
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/stretchr/testify/require"
-	"testing"
-	"time"
 )
 
 func TestDatabase(t *testing.T) {
