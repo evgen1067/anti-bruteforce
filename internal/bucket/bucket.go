@@ -2,7 +2,6 @@ package bucket
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -83,7 +82,6 @@ func (l *LeakyBucket) addInBucket(bucketKey, valueKey string) bool {
 }
 
 func (l *LeakyBucket) ResetBucket() {
-	fmt.Println(time.Now())
 	for _, bucketKey := range []string{common.LoginBucketKey, common.PassBucketKey, common.IPBucketKey} {
 		if bucket, ok := l.buckets[bucketKey]; ok {
 			bucket.values = make(MapValueQuantity)

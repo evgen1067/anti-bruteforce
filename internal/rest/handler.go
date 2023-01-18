@@ -17,6 +17,15 @@ func CustomNotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	WriteException(w, &ex)
 }
 
+func ResetBucket(w http.ResponseWriter, r *http.Request) {
+	s.ResetBucket()
+	ex := common.APIException{
+		Code:    http.StatusOK,
+		Message: "Leaky buckets dropped.",
+	}
+	WriteException(w, &ex)
+}
+
 func Auth(w http.ResponseWriter, r *http.Request) {
 	var req common.APIAuthRequest
 	bytes, err := io.ReadAll(r.Body)

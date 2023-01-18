@@ -44,3 +44,7 @@ func (a *AuthService) Authorize(req common.APIAuthRequest) bool {
 	}
 	return a.bucket.Add(req)
 }
+
+func (a *AuthService) ResetBucket() {
+	a.bucket.ResetBucket()
+}

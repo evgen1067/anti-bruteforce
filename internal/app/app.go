@@ -6,6 +6,7 @@ import (
 	"syscall"
 
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
+	"github.com/evgen1067/anti-bruteforce/internal/cli"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/evgen1067/anti-bruteforce/internal/logger"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
@@ -44,6 +45,8 @@ func Run(zLog *logger.Logger, cfg *config.Config) error {
 			errs <- err
 		}
 	}()
+
+	cli.Run(ctx)
 
 	// Выползаем при ошибке или завершении программы
 	select {

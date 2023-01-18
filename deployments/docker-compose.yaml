@@ -44,19 +44,19 @@ services:
       postgres:
         condition: service_healthy
 
-#  bruteforce:
-#    container_name: ${APP_NAME}_app
-#    build:
-#      context: ..
-#      dockerfile: ./build/bruteforce/Dockerfile
-#    restart: unless-stopped
-#    ports:
-#      - "8888:8888"
-#    command: --config /configs/config.json
-#    volumes:
-#      - "../configs:/configs"
-#    networks:
-#      - new
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
+  bruteforce:
+    container_name: ${APP_NAME}_app
+    build:
+      context: ..
+      dockerfile: ./build/bruteforce/Dockerfile
+    restart: on-failure
+    ports:
+      - "8888:8888"
+    command: --config /configs/config.json
+    volumes:
+      - "../configs:/configs"
+    networks:
+      - new
+    depends_on:
+      postgres:
+        condition: service_healthy

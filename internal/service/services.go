@@ -12,6 +12,7 @@ import (
 
 type Auth interface {
 	Authorize(req common.APIAuthRequest) bool
+	ResetBucket()
 }
 
 type Blacklist interface {

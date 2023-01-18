@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
@@ -17,11 +18,6 @@ import (
 	"github.com/evgen1067/anti-bruteforce/internal/service"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/require"
-)
-
-const (
-	blacklistURL = "/list/blacklist"
-	whitelistURL = "/list/whitelist"
 )
 
 func TestCustomNotFoundHandler(t *testing.T) {
@@ -45,8 +41,8 @@ func TestAdd(t *testing.T) {
 	cfg, err := config.Parse("../../configs/local.json")
 	require.NoError(t, err)
 	newLogger, err := logger.NewLogger(cfg)
-	leakyBucket := bucket.NewLeakyBucket(cfg)
 	require.NoError(t, err)
+	leakyBucket := bucket.NewLeakyBucket(cfg)
 	ctx := context.Background()
 	repo := psql.NewRepo(cfg)
 	err = repo.Connect(ctx)
@@ -56,124 +52,112 @@ func TestAdd(t *testing.T) {
 	NewServer(s, cfg)
 
 	request := common.APIListRequest{Address: "127.0.12.1/25"}
-
+	b := new(bytes.Buffer)
+	// удачное добавление в лист
 	t.Run("Successful addition to the blacklist", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Add).Methods(http.MethodPost)
-		req, err := http.NewRequestWithContext(ctx, http.MethodPost, blacklistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, common.BlacklistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusCreated, recorder.Code)
 	})
-
+	// неудачное добавление в лист, тк адрес уже есть в БД
 	t.Run("Unsuccessful addition to the blacklist (the address already exists in the list)", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Add).Methods(http.MethodPost)
-		req, err := http.NewRequestWithContext(ctx, http.MethodPost, blacklistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, common.BlacklistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusConflict, recorder.Code)
 	})
-
+	// удачное добавление в лист
 	t.Run("Successful addition to the whitelist", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Add).Methods(http.MethodPost)
-		req, err := http.NewRequestWithContext(ctx, http.MethodPost, whitelistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, common.WhitelistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusCreated, recorder.Code)
 	})
-
+	// неудачное добавление в лист, тк адрес уже есть в БД
 	t.Run("Unsuccessful addition to the blacklist (the address already exists in the list)", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Add).Methods(http.MethodPost)
-		req, err := http.NewRequestWithContext(ctx, http.MethodPost, whitelistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, common.WhitelistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusConflict, recorder.Code)
 	})
-
+	// удаление из листа
 	t.Run("Successful removal from the blacklist", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
-		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, blacklistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, common.BlacklistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusAccepted, recorder.Code)
 	})
-
+	// удаление из листа
 	t.Run("Successful removal from the whitelist", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
-		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, whitelistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, common.WhitelistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusAccepted, recorder.Code)
 	})
-
+	// удаление несуществующего значения из листа
 	t.Run("Unsuccessful removal from the blacklist (address does not exist)", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
-		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, blacklistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, common.BlacklistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusNotFound, recorder.Code)
 	})
-
+	// удаление несуществующего значения из листа
 	t.Run("Unsuccessful removal from the whitelist (address does not exist)", func(t *testing.T) {
-		b := new(bytes.Buffer)
 		err = json.NewEncoder(b).Encode(&request)
 		require.NoError(t, err)
-
 		recorder := httptest.NewRecorder()
 		router := mux.NewRouter()
 		router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
-		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, whitelistURL, b)
+		req, err := http.NewRequestWithContext(ctx, http.MethodDelete, common.WhitelistURL, b)
 		require.NoError(t, err)
 		router.ServeHTTP(recorder, req)
 
 		require.Equal(t, http.StatusNotFound, recorder.Code)
 	})
+	// удаляем папку с логами, которые тут появились
+	err = os.RemoveAll("logs")
+	require.NoError(t, err)
 }
