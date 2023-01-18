@@ -5,9 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/evgen1067/anti-bruteforce/internal/common"
 	"net/http"
 	"strings"
+
+	"github.com/evgen1067/anti-bruteforce/internal/common"
 )
 
 type AppCLI struct {
@@ -84,7 +85,7 @@ func (a *AppCLI) ResetBucket() error {
 }
 
 func (a *AppCLI) makeRequest(httpMethod, url string, body *bytes.Buffer) error {
-	var baseURL = "http://localhost:8888"
+	baseURL := "http://localhost:8888"
 	req, err := http.NewRequestWithContext(a.ctx, httpMethod, baseURL+url, body)
 	if err != nil {
 		return err
