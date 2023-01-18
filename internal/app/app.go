@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
+	"github.com/evgen1067/anti-bruteforce/internal/logger"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
 	"github.com/evgen1067/anti-bruteforce/internal/rest"
 	"github.com/evgen1067/anti-bruteforce/internal/service"
@@ -11,7 +12,7 @@ import (
 	"syscall"
 )
 
-func Run(cfg *config.Config) error {
+func Run(zLog *logger.Logger, cfg *config.Config) error {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
@@ -32,7 +33,7 @@ func Run(cfg *config.Config) error {
 	}()
 
 	// Собираем сервисы
-	services := service.NewServices(ctx, db, leakyBucket)
+	services := service.NewServices(ctx, db, leakyBucket, zLog)
 
 	// Запускаем сервер АПИ
 	server := rest.NewServer(services, cfg)

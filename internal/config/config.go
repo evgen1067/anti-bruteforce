@@ -6,6 +6,10 @@ import (
 )
 
 type Config struct {
+	Logger struct {
+		Level string `json:"level"`
+		File  string `json:"file"`
+	} `json:"logger"`
 	HTTP struct {
 		Host string `json:"host"`
 		Port string `json:"port"`

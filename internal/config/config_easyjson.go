@@ -36,12 +36,14 @@ func easyjson6615c02eDecodeGithubComEvgen1067AntiBruteforceInternalConfig(in *jl
 			continue
 		}
 		switch key {
+		case "logger":
+			easyjson6615c02eDecode(in, &out.Logger)
 		case "http":
-			easyjson6615c02eDecode(in, &out.HTTP)
+			easyjson6615c02eDecode1(in, &out.HTTP)
 		case "db":
-			easyjson6615c02eDecode1(in, &out.DB)
+			easyjson6615c02eDecode2(in, &out.DB)
 		case "limitations":
-			easyjson6615c02eDecode2(in, &out.Limitations)
+			easyjson6615c02eDecode3(in, &out.Limitations)
 		default:
 			in.SkipRecursive()
 		}
@@ -57,19 +59,24 @@ func easyjson6615c02eEncodeGithubComEvgen1067AntiBruteforceInternalConfig(out *j
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"http\":"
+		const prefix string = ",\"logger\":"
 		out.RawString(prefix[1:])
-		easyjson6615c02eEncode(out, in.HTTP)
+		easyjson6615c02eEncode(out, in.Logger)
+	}
+	{
+		const prefix string = ",\"http\":"
+		out.RawString(prefix)
+		easyjson6615c02eEncode1(out, in.HTTP)
 	}
 	{
 		const prefix string = ",\"db\":"
 		out.RawString(prefix)
-		easyjson6615c02eEncode1(out, in.DB)
+		easyjson6615c02eEncode2(out, in.DB)
 	}
 	{
 		const prefix string = ",\"limitations\":"
 		out.RawString(prefix)
-		easyjson6615c02eEncode2(out, in.Limitations)
+		easyjson6615c02eEncode3(out, in.Limitations)
 	}
 	out.RawByte('}')
 }
@@ -97,7 +104,7 @@ func (v *Config) UnmarshalJSON(data []byte) error {
 func (v *Config) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjson6615c02eDecodeGithubComEvgen1067AntiBruteforceInternalConfig(l, v)
 }
-func easyjson6615c02eDecode2(in *jlexer.Lexer, out *struct {
+func easyjson6615c02eDecode3(in *jlexer.Lexer, out *struct {
 	Login    int `json:"login"`
 	Password int `json:"password"`
 	IP       int `json:"ip"`
@@ -136,7 +143,7 @@ func easyjson6615c02eDecode2(in *jlexer.Lexer, out *struct {
 		in.Consumed()
 	}
 }
-func easyjson6615c02eEncode2(out *jwriter.Writer, in struct {
+func easyjson6615c02eEncode3(out *jwriter.Writer, in struct {
 	Login    int `json:"login"`
 	Password int `json:"password"`
 	IP       int `json:"ip"`
@@ -161,7 +168,7 @@ func easyjson6615c02eEncode2(out *jwriter.Writer, in struct {
 	}
 	out.RawByte('}')
 }
-func easyjson6615c02eDecode1(in *jlexer.Lexer, out *struct {
+func easyjson6615c02eDecode2(in *jlexer.Lexer, out *struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
@@ -209,7 +216,7 @@ func easyjson6615c02eDecode1(in *jlexer.Lexer, out *struct {
 		in.Consumed()
 	}
 }
-func easyjson6615c02eEncode1(out *jwriter.Writer, in struct {
+func easyjson6615c02eEncode2(out *jwriter.Writer, in struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
 	User     string `json:"user"`
@@ -252,7 +259,7 @@ func easyjson6615c02eEncode1(out *jwriter.Writer, in struct {
 	}
 	out.RawByte('}')
 }
-func easyjson6615c02eDecode(in *jlexer.Lexer, out *struct {
+func easyjson6615c02eDecode1(in *jlexer.Lexer, out *struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
 }) {
@@ -288,7 +295,7 @@ func easyjson6615c02eDecode(in *jlexer.Lexer, out *struct {
 		in.Consumed()
 	}
 }
-func easyjson6615c02eEncode(out *jwriter.Writer, in struct {
+func easyjson6615c02eEncode1(out *jwriter.Writer, in struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
 }) {
@@ -304,6 +311,61 @@ func easyjson6615c02eEncode(out *jwriter.Writer, in struct {
 		const prefix string = ",\"port\":"
 		out.RawString(prefix)
 		out.String(string(in.Port))
+	}
+	out.RawByte('}')
+}
+func easyjson6615c02eDecode(in *jlexer.Lexer, out *struct {
+	Level string `json:"level"`
+	File  string `json:"file"`
+}) {
+	isTopLevel := in.IsStart()
+	if in.IsNull() {
+		if isTopLevel {
+			in.Consumed()
+		}
+		in.Skip()
+		return
+	}
+	in.Delim('{')
+	for !in.IsDelim('}') {
+		key := in.UnsafeFieldName(false)
+		in.WantColon()
+		if in.IsNull() {
+			in.Skip()
+			in.WantComma()
+			continue
+		}
+		switch key {
+		case "level":
+			out.Level = string(in.String())
+		case "file":
+			out.File = string(in.String())
+		default:
+			in.SkipRecursive()
+		}
+		in.WantComma()
+	}
+	in.Delim('}')
+	if isTopLevel {
+		in.Consumed()
+	}
+}
+func easyjson6615c02eEncode(out *jwriter.Writer, in struct {
+	Level string `json:"level"`
+	File  string `json:"file"`
+}) {
+	out.RawByte('{')
+	first := true
+	_ = first
+	{
+		const prefix string = ",\"level\":"
+		out.RawString(prefix[1:])
+		out.String(string(in.Level))
+	}
+	{
+		const prefix string = ",\"file\":"
+		out.RawString(prefix)
+		out.String(string(in.File))
 	}
 	out.RawByte('}')
 }

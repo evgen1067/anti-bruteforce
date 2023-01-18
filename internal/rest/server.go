@@ -19,6 +19,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
 
 	router.Use(headersMiddleware)
+	router.Use(loggerMiddleware)
 
 	router.NotFoundHandler = router.NewRoute().HandlerFunc(CustomNotFoundHandler).GetHandler()
 

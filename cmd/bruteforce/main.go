@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/evgen1067/anti-bruteforce/internal/app"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
+	"github.com/evgen1067/anti-bruteforce/internal/logger"
 	"log"
 )
 
@@ -19,8 +20,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = app.Run(cfg)
+	zLog, err := logger.NewLogger(cfg)
 	if err != nil {
 		log.Fatal(err)
+	}
+	err = app.Run(zLog, cfg)
+	if err != nil {
+		zLog.Error(err.Error())
 	}
 }
