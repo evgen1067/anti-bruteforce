@@ -12,7 +12,7 @@ func TestLogger(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Equal(t, "0.0.0.0", cfg.HTTP.Host)
-		require.Equal(t, "8888", cfg.HTTP.Port)
+		require.Equal(t, "8000", cfg.HTTP.Port)
 
 		require.Equal(t, "0.0.0.0", cfg.DB.Host)
 		require.Equal(t, "9000", cfg.DB.Port)

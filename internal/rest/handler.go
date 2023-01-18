@@ -44,22 +44,23 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
-	ok := s.Authorize(req)
+	status := s.Authorize(req)
 	response := &common.APIAuthResponse{
-		Ok: ok,
+		Ok: status,
 	}
 	jsonResponse, err := response.MarshalJSON()
 	if err != nil {
 		return
 	}
+	if status {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		w.WriteHeader(http.StatusTooManyRequests)
+	}
 	_, err = w.Write(jsonResponse)
 	if err != nil {
 		return
 	}
-	if ok {
-		w.WriteHeader(http.StatusOK)
-	}
-	w.WriteHeader(http.StatusServiceUnavailable)
 }
 
 func Add(w http.ResponseWriter, r *http.Request) {

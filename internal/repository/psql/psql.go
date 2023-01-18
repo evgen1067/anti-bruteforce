@@ -122,7 +122,7 @@ func (r *Repo) Exists(ctx context.Context, table common.TableName, address strin
 			  	 WHERE address >>= $1::inet;`
 	case common.Whitelist:
 		query = `SELECT true whitelist
-			 	 FROM blacklist
+			 	 FROM whitelist
 				 WHERE address >>= $1::inet;`
 	}
 

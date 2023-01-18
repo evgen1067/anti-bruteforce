@@ -4,7 +4,6 @@ package config
 
 import (
 	json "encoding/json"
-
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
@@ -41,6 +40,8 @@ func easyjson6615c02eDecodeGithubComEvgen1067AntiBruteforceInternalConfig(in *jl
 			easyjson6615c02eDecode(in, &out.Logger)
 		case "http":
 			easyjson6615c02eDecode1(in, &out.HTTP)
+		case "cli":
+			out.CLI = bool(in.Bool())
 		case "db":
 			easyjson6615c02eDecode2(in, &out.DB)
 		case "limitations":
@@ -68,6 +69,11 @@ func easyjson6615c02eEncodeGithubComEvgen1067AntiBruteforceInternalConfig(out *j
 		const prefix string = ",\"http\":"
 		out.RawString(prefix)
 		easyjson6615c02eEncode1(out, in.HTTP)
+	}
+	{
+		const prefix string = ",\"cli\":"
+		out.RawString(prefix)
+		out.Bool(bool(in.CLI))
 	}
 	{
 		const prefix string = ",\"db\":"

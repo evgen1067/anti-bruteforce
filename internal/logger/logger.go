@@ -48,7 +48,7 @@ func NewLogger(cfg *config.Config) (*Logger, error) {
 	for i := range file {
 		file[i] = filepath.Join(pathDir, file[i])
 	}
-	file = append(file, "stdout")
+	// file = append(file, "stdout")
 
 	zapCfg := zap.Config{
 		Level:       level,

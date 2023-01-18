@@ -14,7 +14,8 @@ type Config struct {
 		Host string `json:"host"`
 		Port string `json:"port"`
 	} `json:"http"`
-	DB struct {
+	CLI bool `json:"cli"`
+	DB  struct {
 		Host     string `json:"host"`
 		Port     string `json:"port"`
 		User     string `json:"user"`

@@ -49,8 +49,8 @@ type Services struct {
 func NewServices(ctx context.Context, db *psql.Repo, lb *bucket.LeakyBucket, l *logger.Logger) *Services {
 	blacklist := NewBlacklistService(ctx, db)
 	whitelist := NewWhitelistService(ctx, db)
-	auth := NewAuthService(ctx, blacklist, whitelist, lb)
 	logg := NewLogger(l)
+	auth := NewAuthService(ctx, blacklist, whitelist, lb)
 	return &Services{
 		Auth:      auth,
 		Blacklist: blacklist,

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	"github.com/evgen1067/anti-bruteforce/internal/common"
 )
 
@@ -27,20 +26,20 @@ func NewAuthService(ctx context.Context,
 }
 
 func (a *AuthService) Authorize(req common.APIAuthRequest) bool {
-	res, err := a.whitelist.ExistsInWhitelist(req.IP)
+	bl, err := a.blacklist.ExistsInBlacklist(req.IP)
 	if err != nil {
 		return false
 	}
-	if res {
-		return true
+	if bl == true {
+		return false
 	}
 
-	res, err = a.blacklist.ExistsInBlacklist(req.IP)
+	wh, err := a.whitelist.ExistsInWhitelist(req.IP)
 	if err != nil {
 		return false
 	}
-	if res {
-		return false
+	if wh == true {
+		return true
 	}
 	return a.bucket.Add(req)
 }

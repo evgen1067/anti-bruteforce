@@ -2,11 +2,11 @@ package app
 
 import (
 	"context"
+	"github.com/evgen1067/anti-bruteforce/internal/cli"
 	"os/signal"
 	"syscall"
 
 	"github.com/evgen1067/anti-bruteforce/internal/bucket"
-	"github.com/evgen1067/anti-bruteforce/internal/cli"
 	"github.com/evgen1067/anti-bruteforce/internal/config"
 	"github.com/evgen1067/anti-bruteforce/internal/logger"
 	"github.com/evgen1067/anti-bruteforce/internal/repository/psql"
@@ -46,7 +46,11 @@ func Run(zLog *logger.Logger, cfg *config.Config) error {
 		}
 	}()
 
-	cli.Run(ctx)
+	if cfg.CLI {
+		go func() {
+			cli.Run(ctx)
+		}()
+	}
 
 	// Выползаем при ошибке или завершении программы
 	select {

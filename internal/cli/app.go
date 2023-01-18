@@ -77,7 +77,7 @@ func (a *AppCLI) body(addr string) (*bytes.Buffer, error) {
 }
 
 func (a *AppCLI) ResetBucket() error {
-	err := a.makeRequest(http.MethodGet, common.ResetURL, new(bytes.Buffer))
+	err := a.makeRequest(http.MethodPost, common.ResetURL, new(bytes.Buffer))
 	if err != nil {
 		return err
 	}

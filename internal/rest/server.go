@@ -18,7 +18,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/auth", Auth).Methods(http.MethodPost)
 	router.HandleFunc("/list/{value}", Add).Methods(http.MethodPost)
 	router.HandleFunc("/list/{value}", Delete).Methods(http.MethodDelete)
-	router.HandleFunc("/reset/bucket", ResetBucket).Methods(http.MethodGet)
+	router.HandleFunc("/reset/bucket", ResetBucket).Methods(http.MethodPost)
 
 	router.Use(headersMiddleware)
 	router.Use(loggerMiddleware)
